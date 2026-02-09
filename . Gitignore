@@ -1,0 +1,23 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.log
+
+# Backups
+*.bak
+*.tmp
+
+# Carpetas de editor
+.vscode/
+.idea/
+
+# Android (por si después pruebas)
+*.apk
+*.aab
+build/
+.gradle/
+
+# Otros
+node_modules/
