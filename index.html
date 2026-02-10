@@ -17,7 +17,6 @@ body{
     color:#fff;
 }
 
-/* Pregunta */
 .container{text-align:center;}
 h1{font-size:2.3em;color:#ffd6e8;margin-bottom:40px;}
 
@@ -38,6 +37,7 @@ button{
     color:white;
     left:50%;
     transform:translateX(-50%);
+    z-index:2;
 }
 
 #noBtn{
@@ -46,19 +46,18 @@ button{
     left:50%;
     top:90px;
     transform:translateX(-50%);
+    z-index:1;
 }
 
-/* Pantalla final */
 .final{
     display:none;
     position:absolute;
     inset:0;
-    background:url("https://images.unsplash.com/photo-1503264116251-35a269479413") center/cover no-repeat;
+    background:linear-gradient(180deg,#05030f,#12051c);
     justify-content:center;
     align-items:center;
 }
 
-/* Carta */
 .letter{
     background:rgba(15,10,25,.92);
     padding:30px;
@@ -70,7 +69,6 @@ button{
     z-index:2;
 }
 
-/* Osito */
 .bear{
     position:absolute;
     bottom:12%;
@@ -88,7 +86,6 @@ button{
     animation:hug 1.5s infinite alternate;
 }
 
-/* Radio */
 .radio{
     position:absolute;
     bottom:14%;
@@ -99,4 +96,71 @@ button{
 
 @keyframes walk{
     from{transform:translateX(0);}
-    to{
+    to{transform:translateX(220px);}
+}
+
+@keyframes hug{
+    from{transform:scale(1);}
+    to{transform:scale(1.1);}
+}
+
+@keyframes pulse{
+    from{transform:scale(1);}
+    to{transform:scale(1.15);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="question">
+    <h1>¿Quieres ser mi San Valentín? 💖</h1>
+    <div class="buttons">
+        <button id="yesBtn">Sí</button>
+        <button id="noBtn">No</button>
+    </div>
+</div>
+
+<div class="final" id="final">
+    <div class="letter" id="letter"></div>
+    <div class="bear hug">🐻<span>🌹🍫</span></div>
+    <div class="radio">📻🎶</div>
+</div>
+
+<audio id="music" src="Chicago_-_Youre_The_Inspiration.mp3"></audio>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const final = document.getElementById("final");
+const question = document.getElementById("question");
+const letter = document.getElementById("letter");
+const music = document.getElementById("music");
+
+let scale = 1;
+
+noBtn.addEventListener("click", () => {
+    scale += 0.3;
+    yesBtn.style.transform = `translateX(-50%) scale(${scale})`;
+    if(scale > 3){
+        noBtn.style.display = "none";
+    }
+});
+
+yesBtn.addEventListener("click", () => {
+    question.style.display = "none";
+    final.style.display = "flex";
+    music.play();
+
+    const text = "Gracias por aceptar ser mi San Valentín, te amo con todo mi ser Fernanda. Te espero este 14 de febrero 🥹💖 Con mucho amor, Carlos Ch";
+    let i = 0;
+    const interval = setInterval(()=>{
+        letter.textContent += text[i];
+        i++;
+        if(i >= text.length) clearInterval(interval);
+    }, 60);
+});
+</script>
+
+</body>
+</html>
