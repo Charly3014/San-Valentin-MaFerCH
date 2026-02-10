@@ -1,13 +1,20 @@
-I<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+
+<!-- Anti caché -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>San Valentín 🌙❤️</title>
 
 <style>
 body{
   margin:0;
-  font-family:Georgia, serif;
+  font-family:'Georgia',serif;
   background:linear-gradient(135deg,#0b132b,#2c0735);
   height:100vh;
   display:flex;
@@ -17,8 +24,9 @@ body{
   color:#fff;
 }
 
+/* INICIO */
 .container{text-align:center;}
-h1{font-size:2.3em;color:#ffd6e8;margin-bottom:40px;}
+h1{font-size:2.2em;color:#ffd6e8;margin-bottom:40px;}
 
 .buttons{position:relative;height:160px;}
 
@@ -28,7 +36,7 @@ button{
   border:none;
   border-radius:30px;
   cursor:pointer;
-  transition:.4s;
+  transition:.3s;
   position:absolute;
 }
 
@@ -47,89 +55,179 @@ button{
   transform:translateX(-50%);
 }
 
-/* Pantalla final */
+/* FINAL */
 .final{
   display:none;
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,#020111,#191970);
+  background:url("https://images.unsplash.com/photo-1503264116251-35a269479413") center/cover no-repeat;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
-  text-align:center;
 }
 
-/* Carta */
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(10,10,30,.55);
+}
+
+/* CARTA */
 .letter{
+  position:relative;
   background:rgba(15,10,25,.92);
   padding:30px;
   border-radius:20px;
-  max-width:520px;
+  max-width:540px;
   color:#ffd6e8;
+  text-align:center;
   box-shadow:0 0 40px rgba(0,0,0,.6);
+  z-index:2;
   font-size:20px;
 }
 
-/* Osito */
+/* OSITO */
 .bear{
-  font-size:80px;
-  margin-bottom:20px;
-  animation:bounce 2s infinite;
+  position:absolute;
+  bottom:10%;
+  left:-30%;
+  font-size:90px;
+  animation:walk 5s forwards;
+  z-index:2;
 }
 
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-12px);}
+.bear span{display:block;font-size:40px;}
+
+@keyframes walk{
+  to{left:20%;}
+}
+
+/* ABRAZO */
+.hug{
+  animation:hug 1.2s infinite alternate;
+}
+
+@keyframes hug{
+  from{transform:scale(1);}
+  to{transform:scale(1.08);}
+}
+
+/* CORAZONES */
+.heart{
+  position:absolute;
+  bottom:20%;
+  font-size:30px;
+  animation:float 4s linear forwards;
+}
+
+@keyframes float{
+  from{transform:translateY(0); opacity:1;}
+  to{transform:translateY(-300px); opacity:0;}
+}
+
+/* RADIO */
+.radio{
+  position:absolute;
+  bottom:12%;
+  right:10%;
+  font-size:60px;
+  animation:pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="question">
-  <h1>¿Quieres ser mi San Valentín? 💖</h1>
+<div class="container" id="start">
+  <h1>¿Quieres ser mi San Valentín, Fernanda? 🌙❤️</h1>
   <div class="buttons">
-    <button id="yesBtn">Sí</button>
-    <button id="noBtn">No</button>
+    <button id="yesBtn">Sí 💖</button>
+    <button id="noBtn">No 😢</button>
   </div>
 </div>
 
-<div class="final" id="finalScreen">
-  <div class="bear">🐻💐🍫</div>
-  <div class="letter" id="letter"></div>
+<div class="final" id="final">
+  <div class="overlay"></div>
+
+  <div class="bear" id="bear">
+    🧸
+    <span>🍫💐</span>
+  </div>
+
+  <div class="radio">📻🎶</div>
+
+  <div class="letter">
+    <p id="text"></p>
+  </div>
 </div>
 
-<audio id="music" src="Chicago_-_Youre_The_Inspiration.mp3"></audio>
+<audio id="music" preload="auto">
+  <source src="https://dl.sndup.net/c5zq/Chicago%20-%20You're%20The%20Inspiration.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-let scale = 1;
-const yes = document.getElementById("yesBtn");
-const no = document.getElementById("noBtn");
-const finalScreen = document.getElementById("finalScreen");
-const question = document.getElementById("question");
-const letter = document.getElementById("letter");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const start = document.getElementById("start");
+const final = document.getElementById("final");
+const textEl = document.getElementById("text");
 const music = document.getElementById("music");
+const bear = document.getElementById("bear");
 
-const message = "Gracias por aceptar ser mi San Valentín ❤️\nTe amo con todo mi ser, Fernanda.\nTe espero este 14 de febrero 🥹💖\n\nCon mucho amor,\nCarlos Ch";
+/* BOTÓN NO HUYE */
+function moveNo(){
+  const x = Math.random()*220 - 110;
+  const y = Math.random()*220 - 110;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+}
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
 
-no.addEventListener("click", () => {
-  scale += 0.3;
-  yes.style.transform = `translateX(-50%) scale(${scale})`;
-});
+/* CORAZONES */
+function hearts(){
+  for(let i=0;i<20;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText="💖";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDelay=(Math.random()*2)+"s";
+    final.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  }
+}
 
-yes.addEventListener("click", () => {
-  alert("Sí funciona ❤️");
-  question.style.display = "none";
-  finalScreen.style.display = "flex";
+/* BOTÓN SÍ */
+yesBtn.addEventListener("click", ()=>{
+  start.style.display="none";
+  final.style.display="flex";
   music.play().catch(()=>{});
 
-  let i = 0;
-  letter.textContent = "";
-  const typing = setInterval(() => {
-    letter.textContent += message[i];
-    i++;
-    if(i >= message.length) clearInterval(typing);
-  }, 50);
+  const message =
+`Gracias por aceptar ser mi San Valentín ❤️
+Fernanda, te amo con todo mi ser.
+Eres mi lugar seguro, mi paz y mi alegría.
+Te espero este 14 de febrero 🥹💖
+
+Con todo mi amor,
+Carlos Ch`;
+
+  let i=0;
+  textEl.innerHTML="";
+  function type(){
+    if(i < message.length){
+      textEl.innerHTML += message[i]==="\n"?"<br>":message[i];
+      i++;
+      setTimeout(type,50);
+    }else{
+      bear.classList.add("hug");
+      hearts();
+    }
+  }
+  type();
 });
 </script>
 
