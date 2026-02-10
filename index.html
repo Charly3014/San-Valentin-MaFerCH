@@ -46,11 +46,47 @@ button{
   top:90px;
   transform:translateX(-50%);
 }
+
+/* Pantalla final */
+.final{
+  display:none;
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,#020111,#191970);
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+}
+
+/* Carta */
+.letter{
+  background:rgba(15,10,25,.92);
+  padding:30px;
+  border-radius:20px;
+  max-width:520px;
+  color:#ffd6e8;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+  font-size:20px;
+}
+
+/* Osito */
+.bear{
+  font-size:80px;
+  margin-bottom:20px;
+  animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-12px);}
+}
 </style>
 </head>
 
 <body>
-<div class="container">
+
+<div class="container" id="question">
   <h1>¿Quieres ser mi San Valentín? 💖</h1>
   <div class="buttons">
     <button id="yesBtn">Sí</button>
@@ -58,15 +94,43 @@ button{
   </div>
 </div>
 
+<div class="final" id="finalScreen">
+  <div class="bear">🐻💐🍫</div>
+  <div class="letter" id="letter"></div>
+</div>
+
+<audio id="music" src="Chicago_-_Youre_The_Inspiration.mp3"></audio>
+
 <script>
 let scale = 1;
 const yes = document.getElementById("yesBtn");
 const no = document.getElementById("noBtn");
+const finalScreen = document.getElementById("finalScreen");
+const question = document.getElementById("question");
+const letter = document.getElementById("letter");
+const music = document.getElementById("music");
+
+const message = "Gracias por aceptar ser mi San Valentín ❤️\nTe amo con todo mi ser, Fernanda.\nTe espero este 14 de febrero 🥹💖\n\nCon mucho amor,\nCarlos Ch";
 
 no.addEventListener("click", () => {
   scale += 0.3;
   yes.style.transform = `translateX(-50%) scale(${scale})`;
 });
+
+yes.addEventListener("click", () => {
+  question.style.display = "none";
+  finalScreen.style.display = "flex";
+  music.play().catch(()=>{});
+
+  let i = 0;
+  letter.textContent = "";
+  const typing = setInterval(() => {
+    letter.textContent += message[i];
+    i++;
+    if(i >= message.length) clearInterval(typing);
+  }, 50);
+});
 </script>
+
 </body>
 </html>
